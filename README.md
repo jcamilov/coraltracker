@@ -1,55 +1,25 @@
-# Edge TPU Object Tracker Example
-
-This repo contains a collection of examples that use camera streams
-together with the [TensorFlow Lite API](https://tensorflow.org/lite) with a
-Coral device such as the
-[USB Accelerator](https://coral.withgoogle.com/products/accelerator) or
-[Dev Board](https://coral.withgoogle.com/products/dev-board) and provides an Object tracker for use with the detected objects.
+# Edge TPU Object Tracker Example, modified to run for CIPASAJEROS
 
 
 ## Installation
-
-1.  First, be sure you have completed the [setup instructions for your Coral
-    device](https://coral.ai/docs/setup/). If it's been a while, repeat to be sure
-    you have the latest software.
-
-    Importantly, you should have the latest TensorFlow Lite runtime installed
-    (as per the [Python quickstart](
-    https://www.tensorflow.org/lite/guide/python)).
-
-2.  Clone this Git repo onto your computer:
+2.  Clone:
 
     ```
     mkdir google-coral && cd google-coral
 
-    git clone https://github.com/google-coral/example-object-tracker.git
+    git clone https://github.com/jcamilov/coraltracker.git
 
     cd example-object-tracker/
     ```
 
-3.  Download the models:
+3.  Download models:
 
     ```
     sh download_models.sh
     ```
 
-    These models will be downloaded to a new folder
-    ```models```.
-
-
-Further requirements may be needed by the different camera libraries, check the
-README file for the respective subfolder.
-
-## Contents
-
-  * __gstreamer__: Python examples using gstreamer to obtain camera stream. These
-    examples work on Linux using a webcam, Raspberry Pi with
-    the Raspicam, and on the Coral DevBoard using the Coral camera. For the
-    former two, you will also need a Coral USB Accelerator to run the models.
-
-    This demo provides the support of an Object tracker. After following the setup 
-    instructions in README file for the subfolder ```gstreamer```, you can run the tracker demo:
-
+4. Install requirements
+5. Run the model
     ```
     cd gstreamer
     python3 detect.py --tracker sort

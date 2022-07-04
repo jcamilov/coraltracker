@@ -74,6 +74,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             ), td[2].item(), td[3].item(), td[4].item()
             overlap = 0
             for ob in objs:
+                print(ob)
                 dx0, dy0, dx1, dy1 = ob.bbox.xmin.item(), ob.bbox.ymin.item(
                 ), ob.bbox.xmax.item(), ob.bbox.ymax.item()
                 area = (min(dx1, x1)-max(dx0, x0))*(min(dy1, y1)-max(dy0, y0))

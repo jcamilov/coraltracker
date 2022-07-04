@@ -97,6 +97,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             shadow_text(dwg, x, y - 5, label)
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
+            dwg.add(dwg.circle(insert=(x1-x0, y1-y0), r=4))
     else:
         for obj in objs:
             x0, y0, x1, y1 = list(obj.bbox)

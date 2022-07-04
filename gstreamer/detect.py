@@ -70,7 +70,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
         shadow_text(dwg, 10, y*20, line)
     if trackerFlag and (np.array(trdata)).size:
         for td in trdata:
-            print('td: '+td)
+            print('td: ',td)
             x0, y0, x1, y1, trackID = td[0].item(), td[1].item(
             ), td[2].item(), td[3].item(), td[4].item()
             overlap = 0

@@ -3,11 +3,7 @@
 2.  Clone:
 
     ```
-    mkdir google-coral && cd google-coral
-
     git clone https://github.com/jcamilov/coraltracker.git
-
-    cd example-object-tracker/
     ```
 
 3.  Download models:

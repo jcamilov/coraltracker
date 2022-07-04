@@ -1,7 +1,5 @@
-# Edge TPU Object Tracker Example, modified to run for CIPASAJEROS
+# Object Tracker example modified to run for CIPASAJEROS
 
-
-## Installation
 2.  Clone:
 
     ```

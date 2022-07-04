@@ -122,8 +122,7 @@ class BBox(collections.namedtuple('BBox', ['xmin', 'ymin', 'xmax', 'ymax'])):
     Represents a rectangle which sides are either vertical or horizontal, parallel
     to the x or y axis.
     """
-    __slots__ = ()
-
+    __slots__ = ()    
 
 def get_output(interpreter, score_threshold, top_k, image_scale=1.0):
     """Returns list of detected objects."""
@@ -139,7 +138,8 @@ def get_output(interpreter, score_threshold, top_k, image_scale=1.0):
             bbox=BBox(xmin=np.maximum(0.0, xmin),
                       ymin=np.maximum(0.0, ymin),
                       xmax=np.minimum(1.0, xmax),
-                      ymax=np.minimum(1.0, ymax)))
+                      ymax=np.minimum(1.0, ymax)),
+            centroid=(np.minimum(1.0, xmax)-np.maximum(0.0, xmin),np.minimum(1.0, ymax)-np.maximum(0.0, ymin)))
     return [make(i) for i in range(top_k) if scores[i] >= score_threshold]
 
 

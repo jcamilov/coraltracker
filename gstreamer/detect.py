@@ -70,11 +70,12 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
         shadow_text(dwg, 10, y*20, line)
     if trackerFlag and (np.array(trdata)).size:
         for td in trdata:
+            print('td: '+td)
             x0, y0, x1, y1, trackID = td[0].item(), td[1].item(
             ), td[2].item(), td[3].item(), td[4].item()
             overlap = 0
             for ob in objs:
-                print(ob.bbox)
+                print(ob)
                 dx0, dy0, dx1, dy1 = ob.bbox.xmin.item(), ob.bbox.ymin.item(
                 ), ob.bbox.xmax.item(), ob.bbox.ymax.item()
                 area = (min(dx1, x1)-max(dx0, x0))*(min(dy1, y1)-max(dy0, y0))

@@ -1,3 +1,5 @@
+# sube a github los cambios con un solo comando. Mas rápido.
+
 git add --all
 
 if [ -z "$1" ]

@@ -71,16 +71,14 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
     # si continua rastreo
     if trackerFlag and (np.array(trdata)).size:
         for td in trdata:
-            print('td: ',td)
             x0, y0, x1, y1, trackID = td[0].item(), td[1].item(
             ), td[2].item(), td[3].item(), td[4].item() # box del tracker
             overlap = 0
             for ob in objs: 
-                print(ob)
                 dx0, dy0, dx1, dy1 = ob.bbox.xmin.item(), ob.bbox.ymin.item(
                 ), ob.bbox.xmax.item(), ob.bbox.ymax.item()  # box del objeto reconocido
                 area = (min(dx1, x1)-max(dx0, x0))*(min(dy1, y1)-max(dy0, y0))
-                if (area > overlap and ob.id==2): # selecciona el objeto que se esta rastreando (en teoría es el único que hace overlap)
+                if (area > overlap): # selecciona el objeto que se esta rastreando (en teoría es el único que hace overlap)
                     overlap = area
                     obj = ob
 
@@ -184,7 +182,12 @@ def main():
         common.set_input(interpreter, input_tensor)
         interpreter.invoke()
         # For larger input image sizes, use the edgetpu.classification.engine for better performance
-        objs = get_output(interpreter, args.threshold, args.top_k)
+        objects = get_output(interpreter, args.threshold, args.top_k)
+        print(type(objects))
+        print(objects)
+        objs=[]
+        for obj in objects:
+            if obj.id==2: objs.append(obj) 
         end_time = time.monotonic()
         detections = []  # np.array([])
         for n in range(0, len(objs)):

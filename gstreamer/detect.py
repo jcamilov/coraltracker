@@ -43,9 +43,50 @@ import svgwrite
 import time
 from tracker import ObjectTracker
 
+# Contador de pasajeros
+class Counter:
+    def __init__(self):
+        self.pasajeros={}
+        self.entradas=0
+        self.salidas=0
+        self.leftLimit=0.4
+        self.rightLimit=0.6
+    
+    def add_centroid(self,trackID,centroide):
+        id=str(trackID)
+        if (not self.pasajeros.get(id)):
+            self.pasajeros[id]={"trayectoria": [],"foto": ''}
+        self.pasajeros[id]['trayectoria'].append(centroide)
+        self.analizar_trayectoria(trackID)
+
+    def analizar_trayectoria(self,trackID):
+        id=str(trackID)
+        if (self.pasajeros[id]['trayectoria'][0][0]<self.leftLimit):
+            #check passenger going right direction.
+            # Crossed center? then store the picture
+            if (self.pasajeros[id]['trayectoria'][-1][0]>0.5 and self.pasajeros[id]['foto']==''):
+                self.pasajeros[id]['foto']='foto'+id+'OK'
+            # Crossed rigth limit? the count!
+            if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit):
+                self.salidas=self.salidas+1
+        elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit):
+            #check passenger going left direction.
+            # Crossed center? then store the picture
+            if (self.pasajeros[id]['trayectoria'][-1][0]<0.5 and self.pasajeros[id]['foto']==''):
+                self.pasajeros[id]['foto']='foto'+id+'OK'
+            # Crossed left limit? the count!
+            if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit):
+                self.entradas=self.entradas+1
+    
+    def get_count(self):
+        return (self.entradas,self.salidas)
+
+
+
+
 
 Object = collections.namedtuple('Object', ['id', 'score', 'bbox'])
-
+counter = Counter()
 
 def load_labels(path):
     p = re.compile(r'\s*(\d+)(.+)')
@@ -91,13 +132,16 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             x, y = x - box_x, y - box_y
             # Scale to source coordinate space.
             x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
+              # Centroid
+            centroid=(x+w/2, y+h/2)
             percent = int(100 * obj.score)
             label = '{}% {} ID:{}'.format(
                 percent, labels.get(obj.id, obj.id), int(trackID))
             shadow_text(dwg, x, y - 5, label)
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
-            dwg.add(dwg.circle(center=(x+w/2, y+h/2), r=4))
+            dwg.add(dwg.circle(center=centroid, r=4))
+            dwg.add(dwg.line(start=(0.4, 0), end=(0.6,y),stroke='blue'))
     else:
         for obj in objs:
             x0, y0, x1, y1 = list(obj.bbox)
@@ -110,6 +154,8 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             x, y = x - box_x, y - box_y
             # Scale to source coordinate space.
             x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
+            # Centroid
+            centroid=(x+w/2, y+h/2)
             percent = int(100 * obj.score)
             label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
             shadow_text(dwg, x, y - 5, label)
@@ -183,10 +229,8 @@ def main():
         interpreter.invoke()
         # For larger input image sizes, use the edgetpu.classification.engine for better performance
         objects = get_output(interpreter, args.threshold, args.top_k)
-        print(type(objects))
-        print(objects)
         objs=[]
-        for obj in objects:
+        for obj in objects: # guardamos objetos de una sola clase (por ahora, carro)
             if obj.id==2: objs.append(obj) 
         end_time = time.monotonic()
         detections = []  # np.array([])
@@ -208,7 +252,8 @@ def main():
                 trackerFlag = True
             text_lines = [
                 'Inference: {:.2f} ms'.format((end_time - start_time) * 1000),
-                'FPS: {} fps'.format(round(next(fps_counter))), ]
+                'FPS: {} fps'.format(round(next(fps_counter))),
+                'in,out: {}'.format(counter.get_count()), ]
         if len(objs) != 0:
             return generate_svg(src_size, inference_size, inference_box, objs, labels, text_lines, trdata, trackerFlag)
 

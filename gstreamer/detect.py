@@ -228,10 +228,10 @@ def main():
         common.set_input(interpreter, input_tensor)
         interpreter.invoke()
         # For larger input image sizes, use the edgetpu.classification.engine for better performance
-        objects = get_output(interpreter, args.threshold, args.top_k)
-        objs=[]
-        for obj in objects: # guardamos objetos de una sola clase (por ahora, carro)
-            if obj.id==2: objs.append(obj) 
+        objs = get_output(interpreter, args.threshold, args.top_k)
+        # objs=[]
+        # for obj in objects: # guardamos objetos de una sola clase (por ahora, carro)
+        #     if obj.id==2: objs.append(obj) 
         end_time = time.monotonic()
         detections = []  # np.array([])
         for n in range(0, len(objs)):

@@ -52,32 +52,35 @@ class Counter:
         self.leftLimit=0.4
         self.rightLimit=0.6
     
-    def add_centroid(self,trackID,centroide):
+    def add_centroid(self,trackID,centroide, src_width):
         id=str(trackID)
         if (not self.pasajeros.get(id)):
             self.pasajeros[id]={"trayectoria": [],"foto": ''}
         self.pasajeros[id]['trayectoria'].append(centroide)
-        self.analizar_trayectoria(trackID)
+        self.analizar_trayectoria(trackID,src_width)
 
-    def analizar_trayectoria(self,trackID):
+    def analizar_trayectoria(self,trackID,src_width):
         id=str(trackID)
-        if (self.pasajeros[id]['trayectoria'][0][0]<self.leftLimit):
+        if (self.pasajeros[id]['trayectoria'][0][0]<self.leftLimit*src_width):
             #check passenger going right direction.
             # Crossed center? then store the picture
-            if (self.pasajeros[id]['trayectoria'][-1][0]>0.5 and self.pasajeros[id]['foto']==''):
+            if (self.pasajeros[id]['trayectoria'][-1][0]>0.5*src_width and self.pasajeros[id]['foto']==''):
                 self.pasajeros[id]['foto']='foto'+id+'OK'
+                print('foto guardada')
             # Crossed rigth limit? the count!
-            if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit):
+            if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit*src_width):
                 self.salidas=self.salidas+1
                 print('salida (',self.salidas,')')
 
-        elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit):
+        elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit*src_width):
             #check passenger going left direction.
             # Crossed center? then store the picture
-            if (self.pasajeros[id]['trayectoria'][-1][0]<0.5 and self.pasajeros[id]['foto']==''):
+            if (self.pasajeros[id]['trayectoria'][-1][0]<0.5*src_width and self.pasajeros[id]['foto']==''):
                 self.pasajeros[id]['foto']='foto'+id+'OK'
+                print('foto guardada')
+
             # Crossed left limit? the count!
-            if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit):
+            if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit*src_width):
                 self.entradas=self.entradas+1
                 print('entrada (',self.entradas,')')
     
@@ -145,8 +148,8 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
             dwg.add(dwg.circle(center=centroid, r=4))
-            dwg.add(dwg.line(start=(src_w*0.4, 0), end=(src_w*0.4,src_h),stroke='red',stroke_width=10))
-            dwg.add(dwg.line(start=(src_w*0.6, 0), end=(src_w*0.6,src_h),stroke='blue',stroke_width=10))
+            dwg.add(dwg.line(start=(src_w*0.4, 0), end=(src_w*0.4,src_h),stroke='red',stroke_width=5))
+            dwg.add(dwg.line(start=(src_w*0.6, 0), end=(src_w*0.6,src_h),stroke='blue',stroke_width=5))
 
     else:
         for obj in objs:

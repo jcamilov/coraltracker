@@ -55,7 +55,7 @@ class Counter:
     def add_centroid(self,trackID,centroide, src_width):
         id=str(trackID)
         if (not self.pasajeros.get(id)):
-            self.pasajeros[id]={"trayectoria": [],"foto": ''}
+            self.pasajeros[id]={"trayectoria": [],'counted':False,"foto": ''}
         self.pasajeros[id]['trayectoria'].append(centroide)
         self.analizar_trayectoria(trackID,src_width)
 
@@ -67,9 +67,10 @@ class Counter:
             if (self.pasajeros[id]['trayectoria'][-1][0]>0.5*src_width and self.pasajeros[id]['foto']==''):
                 self.pasajeros[id]['foto']='foto'+id+'OK'
                 print('foto guardada')
-            # Crossed rigth limit? the count!
-            if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit*src_width):
+            # Crossed rigth limit and not yet counted? the count!
+            if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit*src_width and not self.pasajeros[id]['counted']):
                 self.salidas=self.salidas+1
+                self.pasajeros[id]['counted']=True
                 print('salida (',self.salidas,')')
 
         elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit*src_width):
@@ -79,9 +80,10 @@ class Counter:
                 self.pasajeros[id]['foto']='foto'+id+'OK'
                 print('foto guardada')
 
-            # Crossed left limit? the count!
-            if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit*src_width):
+            # Crossed left limit and not yet counted? the count!
+            if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit*src_width and not self.pasajeros[id]['counted']):
                 self.entradas=self.entradas+1
+                self.pasajeros[id]['counted']=True
                 print('entrada (',self.entradas,')')
     
     def get_count(self):

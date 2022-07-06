@@ -69,6 +69,8 @@ class Counter:
             # Crossed rigth limit? the count!
             if (self.pasajeros[id]['trayectoria'][-1][0]>self.rightLimit):
                 self.salidas=self.salidas+1
+                print('salida (',self.salidas,')')
+
         elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit):
             #check passenger going left direction.
             # Crossed center? then store the picture
@@ -77,6 +79,7 @@ class Counter:
             # Crossed left limit? the count!
             if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit):
                 self.entradas=self.entradas+1
+                print('entrada (',self.entradas,')')
     
     def get_count(self):
         return (self.entradas,self.salidas)
@@ -134,6 +137,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
               # Centroid
             centroid=(x+w/2, y+h/2)
+            counter.add_centroid(centroid)
             percent = int(100 * obj.score)
             label = '{}% {} ID:{}'.format(
                 percent, labels.get(obj.id, obj.id), int(trackID))
@@ -141,7 +145,9 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
             dwg.add(dwg.circle(center=centroid, r=4))
-            dwg.add(dwg.line(start=(0.4, 0), end=(0.6,y),stroke='blue'))
+            dwg.add(dwg.line(start=(src_w*0.4, 0), end=(src_w*0.4,src_h),stroke='red',stroke_width=10))
+            dwg.add(dwg.line(start=(src_w*0.6, 0), end=(src_w*0.6,src_h),stroke='blue',stroke_width=10))
+
     else:
         for obj in objs:
             x0, y0, x1, y1 = list(obj.bbox)

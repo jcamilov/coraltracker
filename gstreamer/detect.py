@@ -137,7 +137,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
               # Centroid
             centroid=(x+w/2, y+h/2)
-            counter.add_centroid(centroid)
+            counter.add_centroid(trackID,centroid)
             percent = int(100 * obj.score)
             label = '{}% {} ID:{}'.format(
                 percent, labels.get(obj.id, obj.id), int(trackID))

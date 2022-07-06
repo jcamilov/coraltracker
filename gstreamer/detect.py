@@ -231,7 +231,7 @@ def main():
         _objs = get_output(interpreter, args.threshold, args.top_k)
 
         objs=[]
-        for obj in objs: # guardamos objetos de una sola clase (por ahora, carro)
+        for obj in _objs: # guardamos objetos de una sola clase (por ahora, carro)
             if obj.id==2: objs.append(obj) 
             
         end_time = time.monotonic()

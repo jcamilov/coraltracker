@@ -108,7 +108,7 @@ class Counter:
             "registro":round(datetime.datetime.now().timestamp())
         }
         response = requests.put(url,json=json)
-        print(response.json())
+        print(response.text())
 
 
 Object = collections.namedtuple('Object', ['id', 'score', 'bbox'])

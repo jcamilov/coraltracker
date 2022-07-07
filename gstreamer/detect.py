@@ -47,7 +47,7 @@ import firebase_admin
 from firebase_admin import credentials, storage
 
 # Firebase setup
-cred = credentials.Certificate("~/credentials.json")
+cred = credentials.Certificate("/home/mendel/cred/credentials.json")
 firebase_admin.initialize_app(cred,{'storageBucket':'cipasajeros.appspot.com'})
 bucket = storage.bucket()
 url="https://us-central1-cipasajeros.cloudfunctions.net/app/api/vehiculos"

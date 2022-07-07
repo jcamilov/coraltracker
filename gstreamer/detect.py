@@ -51,7 +51,7 @@ from firebase_admin import credentials, storage
 cred = credentials.Certificate("/home/mendel/cred/credentials.json")
 firebase_admin.initialize_app(cred,{'storageBucket':'cipasajeros.appspot.com'})
 bucket = storage.bucket()
-url="https://us-central1-cipasajeros.cloudfunctions.net/app/api/vehiculos"
+url="https://us-central1-cipasajeros.cloudfunctions.net/app/api/vehiculos/testvehicule"
 
 # Contador de pasajeros
 class Counter:
@@ -101,14 +101,13 @@ class Counter:
         return (self.entradas,self.salidas)
 
     def send_photo(self):
-
         json={
             "sensor": "adelante",
             "tipoRegistro":"entradas",
             "registro":round(datetime.datetime.now().timestamp())
         }
         response = requests.put(url,json=json)
-        print(response.text())
+        print(response.json())
 
 
 Object = collections.namedtuple('Object', ['id', 'score', 'bbox'])

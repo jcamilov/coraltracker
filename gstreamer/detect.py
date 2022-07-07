@@ -61,7 +61,7 @@ class Counter:
         self.leftLimit=0.4
         self.rightLimit=0.6
     
-    def add_centroid(self,trackID,centroide, src_width):
+    def add_centroid(self,trackID,centroide, src_width,image):
         id=str(trackID)
         if (not self.pasajeros.get(id)):
             self.pasajeros[id]={"trayectoria": [],'counted':False,"foto": ''}
@@ -99,7 +99,7 @@ class Counter:
     def get_count(self):
         return (self.entradas,self.salidas)
 
-    def send_photo():
+    def send_photo(self):
         response = requests.get(url)
         print(response.json())
 
@@ -157,7 +157,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
               # Centroid
             centroid=(x+w/2, y+h/2)
-            counter.add_centroid(trackID,centroid,src_w)
+            counter.add_centroid(trackID,centroid,src_w,dwg)
             percent = int(100 * obj.score)
             label = '{}% {} ID:{}'.format(
                 percent, labels.get(obj.id, obj.id), int(trackID))

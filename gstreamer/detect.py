@@ -53,6 +53,11 @@ firebase_admin.initialize_app(cred,{'storageBucket':'cipasajeros.appspot.com'})
 bucket = storage.bucket()
 url="https://us-central1-cipasajeros.cloudfunctions.net/app/api/vehiculos/testvehicule"
 
+# TO DO:
+# - Enviar foto
+# - Ensayar un archivo que se ejecute al boot.
+# - Se puede enviar una señal a la board para que haga autoboot???
+
 # Contador de pasajeros
 class Counter:
     def __init__(self):

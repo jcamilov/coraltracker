@@ -42,6 +42,7 @@ import re
 import svgwrite
 import time
 from tracker import ObjectTracker
+import datetime
 import requests
 import firebase_admin
 from firebase_admin import credentials, storage
@@ -100,12 +101,14 @@ class Counter:
         return (self.entradas,self.salidas)
 
     def send_photo(self):
-        response = requests.get(url)
+
+        json={
+            "sensor": "adelante",
+            "tipoRegistro":"entradas",
+            "registro":round(datetime.datetime.now().timestamp())
+        }
+        response = requests.put(url,json=json)
         print(response.json())
-
-
-
-
 
 
 Object = collections.namedtuple('Object', ['id', 'score', 'bbox'])

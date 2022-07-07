@@ -42,6 +42,15 @@ import re
 import svgwrite
 import time
 from tracker import ObjectTracker
+import requests
+import firebase_admin
+from firebase_admin import credentials, storage
+
+# Firebase setup
+cred = credentials.Certificate("./cred/credentials.json")
+firebase_admin.initialize_app(cred,{'storageBucket':'cipasajeros.appspot.com'})
+bucket = storage.bucket()
+url="https://us-central1-cipasajeros.cloudfunctions.net/app/api/vehiculos"
 
 # Contador de pasajeros
 class Counter:
@@ -72,13 +81,14 @@ class Counter:
                 self.salidas=self.salidas+1
                 self.pasajeros[id]['counted']=True
                 print('salida (',self.salidas,')')
-
         elif (self.pasajeros[id]['trayectoria'][0][0]>self.rightLimit*src_width):
             #check passenger going left direction.
             # Crossed center? then store the picture
             if (self.pasajeros[id]['trayectoria'][-1][0]<0.5*src_width and self.pasajeros[id]['foto']==''):
                 self.pasajeros[id]['foto']='foto'+id+'OK'
-                print('foto guardada')
+                print('sending picture...')
+                self.send_photo()
+
 
             # Crossed left limit and not yet counted? the count!
             if (self.pasajeros[id]['trayectoria'][-1][0]<self.leftLimit*src_width and not self.pasajeros[id]['counted']):
@@ -88,6 +98,11 @@ class Counter:
     
     def get_count(self):
         return (self.entradas,self.salidas)
+
+    def send_photo():
+        response = requests.get(url)
+        print(response.json())
+
 
 
 

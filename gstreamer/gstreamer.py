@@ -28,7 +28,7 @@ Gst.init(None)
 
 class GstPipeline:
     def __init__(self, pipeline, user_function, src_size, mot_tracker):
-        print('flag take_picture is: ',user_function[1])
+        print('flag take_picture is: ',user_function)
         print('la userfunction es: ',user_function[0])
         self.user_function = user_function[0]
         self.take_picture= user_function[1]

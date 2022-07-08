@@ -89,18 +89,18 @@ class GstPipeline:
 
     def on_new_sample(self, sink):
         sample = sink.emit('pull-sample')
+        if self.check_tomar_foto():
+            print('se envió la orden de tomar foto.')
+            print('sample type: ',type(sample))
+            print('sample: ',sample)
+            print('esto fue desde gstreamer.')
+            self.take_picture=False
         if not self.sink_size:
             s = sample.get_caps().get_structure(0)
             self.sink_size = (s.get_value('width'), s.get_value('height'))
         with self.condition:
             self.gstbuffer = sample.get_buffer()
             self.condition.notify_all()
-        if self.check_tomar_foto():
-            print('se envió la orden de tomar foto.')
-            print('buffer type: ',type(self.gstbuffer))
-            print('buffer: ',self.gstbuffer)
-            print('esto fue desde gstreamer.')
-            self.take_picture=False
         return Gst.FlowReturn.OK
 
     def get_box(self):

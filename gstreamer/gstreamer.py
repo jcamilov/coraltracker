@@ -28,7 +28,8 @@ Gst.init(None)
 
 class GstPipeline:
     def __init__(self, pipeline, user_function, src_size, mot_tracker):
-        self.user_function = user_function
+        self.user_function = user_function[0]
+        self.take_picture= user_function[1]
         self.running = False
         self.gstbuffer = None
         self.sink_size = None
@@ -37,6 +38,7 @@ class GstPipeline:
         self.condition = threading.Condition()
         self.mot_tracker = mot_tracker
         self.pipeline = Gst.parse_launch(pipeline)
+        # para poner el fakesink, tal vez ponerlo hardcoded aquí?:
         self.overlay = self.pipeline.get_by_name('overlay')
         self.overlaysink = self.pipeline.get_by_name('overlaysink')
         appsink = self.pipeline.get_by_name('appsink')
@@ -134,6 +136,11 @@ class GstPipeline:
                     self.overlay.set_property('data', svg)
                 if self.overlaysink:
                     self.overlaysink.set_property('svg', svg)
+            if self.take_picture:
+                print('el svg del gstreamer es de tipo: ',type(svg))
+                print(svg)
+                print('esto fue desde gstreamer.')
+                self.take_picture=False
 
     def setup_window(self):
         # Only set up our own window if we have Coral overlay sink in the pipeline.

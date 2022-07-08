@@ -67,14 +67,14 @@ class Counter:
         self.leftLimit=0.4
         self.rightLimit=0.6
     
-    def add_centroid(self,trackID,centroide, src_width,image):
+    def add_centroid(self,trackID,centroide, src_width,dwg):
         id=str(trackID)
         if (not self.pasajeros.get(id)):
             self.pasajeros[id]={"trayectoria": [],'counted':False,"foto": ''}
         self.pasajeros[id]['trayectoria'].append(centroide)
-        self.analizar_trayectoria(trackID,src_width)
+        self.analizar_trayectoria(trackID,src_width,dwg)
 
-    def analizar_trayectoria(self,trackID,src_width):
+    def analizar_trayectoria(self,trackID,src_width,dwg):
         id=str(trackID)
         if (self.pasajeros[id]['trayectoria'][0][0]<self.leftLimit*src_width):
             #check passenger going right direction.
@@ -93,7 +93,9 @@ class Counter:
             if (self.pasajeros[id]['trayectoria'][-1][0]<0.5*src_width and self.pasajeros[id]['foto']==''):
                 self.pasajeros[id]['foto']='foto'+id+'OK'
                 print('sending picture...')
-                self.send_photo()
+                # self.send_photo()
+                dwg.saveas('foto.jpg')
+                print('foto stored')
 
 
             # Crossed left limit and not yet counted? the count!

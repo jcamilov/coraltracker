@@ -301,7 +301,7 @@ def main():
             if counter.take_picture:
                 print('guardar foto')
                 print('tensor: ', input_tensor)
-                dir(input_tensor)
+                print(dir(input_tensor))
             return generate_svg(src_size, inference_size, inference_box, objs, labels, text_lines, trdata, trackerFlag)
 
     result = gstreamer.run_pipeline(user_callback,

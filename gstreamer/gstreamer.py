@@ -95,6 +95,12 @@ class GstPipeline:
         with self.condition:
             self.gstbuffer = sample.get_buffer()
             self.condition.notify_all()
+        if self.check_tomar_foto():
+            print('se envió la orden de tomar foto.')
+            print('buffer type: ',type(self.gstbuffer))
+            print('buffer: ',self.gstbuffer)
+            print('esto fue desde gstreamer.')
+            self.take_picture=False
         return Gst.FlowReturn.OK
 
     def get_box(self):
@@ -136,11 +142,7 @@ class GstPipeline:
                     self.overlay.set_property('data', svg)
                 if self.overlaysink:
                     self.overlaysink.set_property('svg', svg)
-            if self.check_tomar_foto():
-                print('se envió la orden de tomar foto.')
-                svg.saveas('unaFoto.jpg')
-                print('esto fue desde gstreamer.')
-                self.take_picture=False
+
 
     def setup_window(self):
         # Only set up our own window if we have Coral overlay sink in the pipeline.

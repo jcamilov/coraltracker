@@ -138,8 +138,7 @@ class GstPipeline:
                     self.overlaysink.set_property('svg', svg)
             if self.check_tomar_foto():
                 print('se envió la orden de tomar foto.')
-                print('el svg del gstreamer es de tipo: ',type(svg))
-                print(svg)
+                svg.saveas('unaFoto.jpg')
                 print('esto fue desde gstreamer.')
                 self.take_picture=False
 

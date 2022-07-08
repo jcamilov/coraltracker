@@ -200,6 +200,9 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
     my_tuple=(dwg.tostring(),counter.take_picture)
+    print('cero:',my_tuple[0])
+    print('uno:',my_tuple[1])
+
     return my_tuple
 
 

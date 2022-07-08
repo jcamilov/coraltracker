@@ -119,9 +119,12 @@ class Counter:
         response = requests.put(url,json=json)
         print(response.json())
 
-
 Object = collections.namedtuple('Object', ['id', 'score', 'bbox'])
 counter = Counter()
+
+def check_tomar_foto():
+    return counter.take_picture
+
 
 def load_labels(path):
     p = re.compile(r'\s*(\d+)(.+)')
@@ -199,11 +202,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             shadow_text(dwg, x, y - 5, label)
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
-    my_tuple=[dwg.tostring(),counter.take_picture]
-    print('cero:',my_tuple[0])
-    print('uno:',my_tuple[1])
-
-    return my_tuple
+    return dwg.tostring()
 
 
 class BBox(collections.namedtuple('BBox', ['xmin', 'ymin', 'xmax', 'ymax'])):
@@ -302,11 +301,13 @@ def main():
             return generate_svg(src_size, inference_size, inference_box, objs, labels, text_lines, trdata, trackerFlag)
 
     result = gstreamer.run_pipeline(user_callback,
+                                    check_tomar_foto,
                                     src_size=(640, 480),
                                     appsink_size=inference_size,
                                     trackerName=args.tracker,
                                     videosrc=args.videosrc,
-                                    videofmt=args.videofmt)
+                                    videofmt=args.videofmt
+                                    )
 
 
 if __name__ == '__main__':

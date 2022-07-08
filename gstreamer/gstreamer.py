@@ -27,11 +27,9 @@ GObject.threads_init()
 Gst.init(None)
 
 class GstPipeline:
-    def __init__(self, pipeline, user_function, src_size, mot_tracker):
-        print('flag take_picture is: ',user_function)
-        print('la userfunction es: ',user_function[0])
-        self.user_function = user_function[0]
-        self.take_picture= user_function[1]
+    def __init__(self, pipeline, user_function, src_size, mot_tracker,check_tomar_foto):
+        self.user_function = user_function
+        self.check_tomar_foto = check_tomar_foto
         self.running = False
         self.gstbuffer = None
         self.sink_size = None
@@ -138,7 +136,8 @@ class GstPipeline:
                     self.overlay.set_property('data', svg)
                 if self.overlaysink:
                     self.overlaysink.set_property('svg', svg)
-            if self.take_picture:
+            if self.check_tomar_foto():
+                print('se envió la orden de tomar foto.')
                 print('el svg del gstreamer es de tipo: ',type(svg))
                 print(svg)
                 print('esto fue desde gstreamer.')
@@ -212,6 +211,7 @@ def detectCoralDevBoard():
   return False
 
 def run_pipeline(user_function,
+                 check_tomar_foto,
                  src_size,
                  appsink_size,
                  trackerName,
@@ -283,5 +283,5 @@ def run_pipeline(user_function,
 
     print('Gstreamer pipeline:\n', pipeline)
 
-    pipeline = GstPipeline(pipeline, user_function, src_size, mot_tracker)
+    pipeline = GstPipeline(pipeline, user_function, src_size, mot_tracker,check_tomar_foto)
     pipeline.run()

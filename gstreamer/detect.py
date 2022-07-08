@@ -46,6 +46,7 @@ import datetime
 import requests
 import firebase_admin
 from firebase_admin import credentials, storage
+from PIL import Image
 
 # Firebase setup
 cred = credentials.Certificate("/home/mendel/cred/credentials.json")
@@ -299,9 +300,9 @@ def main():
                 'in,out: {}'.format(counter.get_count()), ]
         if len(objs) != 0:
             if counter.take_picture:
-                print('guardar foto')
-                print('tensor: ', input_tensor)
-                print(dir(input_tensor))
+                print('guardar foto desde el input_tensor...')
+                image = Image.fromarray(input_tensor)
+                image.save('fotoConPIL.png', format='PNG')
             return generate_svg(src_size, inference_size, inference_box, objs, labels, text_lines, trdata, trackerFlag)
 
     result = gstreamer.run_pipeline(user_callback,

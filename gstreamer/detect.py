@@ -141,7 +141,6 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
     inf_w, inf_h = inference_size
     box_x, box_y, box_w, box_h = inference_box
     scale_x, scale_y = src_w / box_w, src_h / box_h
-    take_picture=False
 
     for y, line in enumerate(text_lines, start=1):
         shadow_text(dwg, 10, y*20, line)
@@ -200,7 +199,7 @@ def generate_svg(src_size, inference_size, inference_box, objs, labels, text_lin
             shadow_text(dwg, x, y - 5, label)
             dwg.add(dwg.rect(insert=(x, y), size=(w, h),
                              fill='none', stroke='red', stroke_width='2'))
-    return [dwg.tostring(),counter.take_picture]
+    return (dwg.tostring(),counter.take_picture)
 
 
 class BBox(collections.namedtuple('BBox', ['xmin', 'ymin', 'xmax', 'ymax'])):
